@@ -1,0 +1,67 @@
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\bin\Debug\DTWGestureRecognition.exe
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\bin\Debug\DTWGestureRecognition.pdb
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\bin\Debug\Coding4Fun.Kinect.Wpf.dll
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\bin\Debug\Microsoft.Expression.Drawing.dll
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\bin\Debug\Coding4Fun.Kinect.Wpf.pdb
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\obj\x86\Debug\ResolveAssemblyReference.cache
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\obj\x86\Debug\MainWindow.baml
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\obj\x86\Debug\MainWindow.g.cs
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\obj\x86\Debug\App.g.cs
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition_MarkupCompile.cache
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.g.resources
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.Properties.Resources.resources
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\obj\x86\Debug\GenerateResource.read.1.tlog
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\obj\x86\Debug\GenerateResource.write.1.tlog
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.exe
+H:\My Dropbox\Dropbox\Microsoft Kinect SDK Beta\DTWGestureRecognition\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.pdb
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.exe
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.pdb
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\bin\Debug\DTWGestureRecognition.exe
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\bin\Debug\DTWGestureRecognition.pdb
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\bin\Debug\Microsoft.Expression.Drawing.dll
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\bin\Debug\Coding4Fun.Kinect.Wpf.pdb
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\obj\x86\Debug\MainWindow.baml
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\obj\x86\Debug\MainWindow.g.cs
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\obj\x86\Debug\App.g.cs
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition_MarkupCompile.cache
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.g.resources
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.Properties.Resources.resources
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Cristian\Desktop\kinectdtw-1.0\trunk\DTWGestureRecognition\obj\x86\Debug\GenerateResource.write.1.tlog
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.exe
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.pdb
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\bin\Debug\DTWGestureRecognition.exe
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\bin\Debug\DTWGestureRecognition.pdb
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\bin\Debug\Microsoft.Expression.Drawing.dll
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\bin\Debug\Coding4Fun.Kinect.Wpf.pdb
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\obj\x86\Debug\ResolveAssemblyReference.cache
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\obj\x86\Debug\MainWindow.baml
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\obj\x86\Debug\MainWindow.g.cs
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\obj\x86\Debug\App.g.cs
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition_MarkupCompile.cache
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.g.resources
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.Properties.Resources.resources
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\obj\x86\Debug\GenerateResource.read.1.tlog
+H:\cursuri\Kinect\GestureRecognition\trunk\DTWGestureRecognition\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Cristian\Desktop\de aratat la profesor pt licenta\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.exe
+C:\Users\Cristian\Desktop\de aratat la profesor pt licenta\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.pdb
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.exe
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.pdb
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\bin\Debug\DTWGestureRecognition.exe
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\bin\Debug\DTWGestureRecognition.pdb
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\bin\Debug\Microsoft.Expression.Drawing.dll
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\bin\Debug\Coding4Fun.Kinect.Wpf.pdb
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\MainWindow.baml
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\MainWindow.g.cs
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\App.g.cs
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition_MarkupCompile.cache
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.g.resources
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.Properties.Resources.resources
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Cristian\Desktop\kinect licenta e1\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Cristian\Desktop\Licenta\kinect licenta e1\08042013\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.exe
+C:\Users\Cristian\Desktop\Licenta\kinect licenta e1\08042013\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.pdb
+C:\Users\Cristian\Desktop\Licenta\kinect licenta e1\21042013\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.exe
+C:\Users\Cristian\Desktop\Licenta\kinect licenta e1\21042013\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.pdb
