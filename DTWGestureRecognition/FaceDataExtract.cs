@@ -212,6 +212,14 @@ namespace DTWGestureRecognition
             }
             return tmp;
         }
+        public static double[] ProcessOrientationData()
+        {
+            var tmp = new double[3];
+            tmp[0] = FaceTrackingViewer.x/23;
+            tmp[1] = FaceTrackingViewer.y/23;
+            tmp[2] = FaceTrackingViewer.z/23;
+            return tmp;
+        }
     }
 }
 

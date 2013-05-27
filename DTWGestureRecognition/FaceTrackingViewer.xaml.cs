@@ -337,7 +337,7 @@ namespace DTWGestureRecognition
                     faceModelGroup.Children.Add(faceTriangle);
                 }
 
-                drawingContext.DrawGeometry(Brushes.LightYellow, new Pen(Brushes.LightYellow, 1.0), faceModelGroup);
+                drawingContext.DrawGeometry(Brushes.Green, new Pen(Brushes.BlueViolet, 1.0), faceModelGroup);
             }
 
             /// <summary>

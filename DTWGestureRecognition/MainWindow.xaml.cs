@@ -16,6 +16,7 @@ namespace DTWGestureRecognition
     using Microsoft.Kinect.Toolkit.FaceTracking;
     using System.ComponentModel;
     using System.Threading;
+    using HandDetection;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -23,7 +24,7 @@ namespace DTWGestureRecognition
     public partial class MainWindow
     {
         #region Private State
-        private const int eachLabelRecordingNb = 4;
+        private const int eachLabelRecordingNb = 1;
         private const int Ignore = 2;
         private const int BufferSize = 32;
         private const int MinimumFrames = 6;
@@ -31,13 +32,14 @@ namespace DTWGestureRecognition
         private string GestureSaveFileLocation = Environment.CurrentDirectory;
         private const string GestureBodySaveFileNamePrefix = @"BodyGestures";
         private const string GestureFaceSaveFileNamePrefix = @"FaceGestures";
+        private const string GestureFaceOrientationSaveFileNamePrefix = @"FaceOrientationGestures";
         private const string GestureStaticBodySaveFileNamePrefix = @"StaticBodyGestures";
         private const string GestureStaticFaceSaveFileNamePrefix = @"StaticFaceGestures";
         private string[] staticFaceGestures = {"Neutral", "Yawn", "Sad", "Happy", "ReiseEyeBrows" };
         private string[] staticFaceAttributes = { "BrowLower", "BrowRaiser", "JawLower", "LipCornerDepressor", "LipRaiser", "LipStretcher" };
         private string[] staticBodyAttributes = { "HandLeft_X", "HandLeft_Y", "HandLeft_Z", "WristLeft_X", "WristLeft_Y", "WristLeft_Z", "ElbowLeft_X", "ElbowLeft_Y", "ElbowLeft_Z", 
                                                      "ElbowRight_X", "ElbowRight_Y", "ElbowRight_Z", "WristRight_X", "WristRight_Y", "WristRight_Z", "HandRight_X", "HandRight_Y", "HandRight_Z"};
-        private string[] staticBodyGestures = { "Left_Hand_Up", "Left_Hand_To_The_Left", "Left_Hand_To_The_Right", "Right_Hand_Up", "Right_Hand_To_The_Left", "Right_Hand_To_The_Right", "Both_Hands_Up", "Both_Hands_Down" };
+        private string[] staticBodyGestures = { "@Left_Hand_Up", "@Left_Hand_To_The_Left", "@Left_Hand_To_The_Right", "@Right_Hand_Up", "@Right_Hand_To_The_Left", "@Right_Hand_To_The_Right", "@Both_Hands_Up", "@Both_Hands_Down" };
         private bool staticFaceInit = false;
         private bool staticBodyInit = false;
         private Weka.BayesNaive acFace;
@@ -45,6 +47,7 @@ namespace DTWGestureRecognition
         private bool _capturing;
         private DtwGestureRecognizer _dtw1;
         private DtwGestureRecognizer _dtw2;
+        private DtwGestureRecognizer _dtw3;
         private StaticGestureDataExtract staticFaceExtractor;
         private StaticGestureDataExtract staticBodyExtractor;
         private int _flipFlop;
@@ -52,6 +55,7 @@ namespace DTWGestureRecognition
         private double[] auxBodyVideo={};
         private double[] auxFaceAnimationUnit = {};
         private ArrayList _faceVideo;
+        private ArrayList _faceOrientationVideo;
         
         private DateTime _captureCountdown = DateTime.Now;
         private System.Windows.Forms.Timer _captureCountdownTimer;
@@ -61,6 +65,7 @@ namespace DTWGestureRecognition
         private Int32Rect _ColorImageBitmapRect;
         private int _ColorImageStride;
         private MouseControl mouse;
+        FHandTracker fHandTracker;
 
         private SpeechRecognizer speechRecognizer;
 
@@ -88,11 +93,15 @@ namespace DTWGestureRecognition
             speechRecognizer = new SpeechRecognizer(this._Kinect);
             this.RecognizedSpeech.Text = speechRecognizer.getRecognizedSpeech();
             _dtw2 = new DtwGestureRecognizer(6, 0.45, 8, 3, 16);//face gesture dtw
+            _dtw3 = new DtwGestureRecognizer(3, 0.45, 8, 3, 16);//face orientation gesture dtw
             _dtw1 = new DtwGestureRecognizer(18, 0.9, 3, 3, 10);//body movements dtw
             staticFaceExtractor = new StaticGestureDataExtract();
             staticBodyExtractor = new StaticGestureDataExtract();
             _bodyVideo = new ArrayList();
             _faceVideo = new ArrayList();
+            _faceOrientationVideo = new ArrayList();
+            fHandTracker = new FHandTracker();
+           
         }
 
 
@@ -127,6 +136,7 @@ namespace DTWGestureRecognition
                 this._ColorImageBitmapRect = new Int32Rect(0, 0, colorStream.FrameWidth,
                 colorStream.FrameHeight);
                 this._ColorImageStride = colorStream.FrameWidth * colorStream.FrameBytesPerPixel;
+
                 videoImage.Source = this._ColorImageBitmap;
                 FaceImage.Source = this._ColorImageBitmap;
                 sensor.ColorFrameReady += new EventHandler<ColorImageFrameReadyEventArgs>(NuiColorFrameReady);
@@ -272,10 +282,8 @@ namespace DTWGestureRecognition
                 this.faceOrientation.Text = "Face Orientation X = " + FaceTrackingViewer.x + " Y = " + FaceTrackingViewer.y + " Z = " + FaceTrackingViewer.z;
                 //this.faceOrientationText.Text = " Face Orientation X = " + FaceTrackingViewer.x;
                 var orientationString = FaceDataExtract.getFaceLookingPosition(FaceTrackingViewer.x, FaceTrackingViewer.y, FaceTrackingViewer.z);
-                this.faceOrientationText.Text = "Face Orientation : "+orientationString;
+                this.faceOrientationText.Text = "Face Orientation: "+orientationString;
                 //mouse.moveMouse(-FaceTrackingViewer.x, -FaceTrackingViewer.y);
-
-                
 
             }
             
@@ -307,7 +315,12 @@ namespace DTWGestureRecognition
                     if (data != null)
                     {
                         Brush brush = new SolidColorBrush(Colors.Blue);
+                        Brush brushRed = new SolidColorBrush(Colors.Red);
+                        Brush brushGreen = new SolidColorBrush(Colors.Green);
+                        Brush brushDarkRed = new SolidColorBrush(Colors.DarkRed);
+                        Brush brushGold = new SolidColorBrush(Colors.Gold);
                         skeletonCanvas.Children.Clear();
+                        canvas1.Children.Clear();
                         //Draw bones
                         if (!(bool)seated.IsChecked)
                         {
@@ -319,24 +332,88 @@ namespace DTWGestureRecognition
                         }
                         else
                         {
-        
-                            skeletonCanvas.Children.Add(GetBodySegment(data.Joints, brush,  JointType.ShoulderCenter, JointType.Head));
+
+                            skeletonCanvas.Children.Add(GetBodySegment(data.Joints, brush, JointType.ShoulderCenter, JointType.Head));
                             skeletonCanvas.Children.Add(GetBodySegment(data.Joints, brush, JointType.ShoulderCenter, JointType.ShoulderLeft, JointType.ElbowLeft, JointType.WristLeft, JointType.HandLeft));
                             skeletonCanvas.Children.Add(GetBodySegment(data.Joints, brush, JointType.ShoulderCenter, JointType.ShoulderRight, JointType.ElbowRight, JointType.WristRight, JointType.HandRight));
                         }
                         // Draw joints
                         foreach (Joint joint in data.Joints)
                         {
-
+                            if (joint.TrackingState == JointTrackingState.NotTracked)
+                            {
+                                continue;
+                            }
                             System.Windows.Point jointPos = GetDisplayPosition(joint);
-                                Ellipse ellipse = new Ellipse
+
+                            // Debug.WriteLine(jointPos.X + "  " + jointPos.Y);
+                            Ellipse ellipse = new Ellipse
+                            {
+                                Fill = brushRed,
+                                Width = 10,
+                                Height = 10,
+                                Margin = new Thickness(jointPos.X, jointPos.Y, 0, 0)
+
+                            };
+                            skeletonCanvas.Children.Add(ellipse);
+                        }
+                        if ((bool)enableHandTracking.IsChecked)
+                        {
+                            fHandTracker.enable();
+                            List<Hand> hands = fHandTracker.hands;
+                            float inm = 1.9F;
+                            handStaticGesture.Text = " Hands: " + hands.Count();
+                            handGestureText.Text = "";
+                            for (int i = 0; i < hands.Count; i++)
+                            {
+                                handGestureText.Text = handGestureText.Text + "hand " + i + " : " + hands[i].fingertips.Count + " f, ";
+                                for (int j = 0; j < hands[i].fingertips.Count; j++)
                                 {
-                                    Fill = brush,
-                                    Width = 10,
-                                    Height = 10,
-                                    Margin = new Thickness(jointPos.X, jointPos.Y, 0, 0)
+
+                                    Ellipse ellipse = new Ellipse
+                                    {
+                                        Fill = brushGreen,
+                                        Width = 15,
+                                        Height = 15,
+                                        Margin = new Thickness((float)(hands[i].fingertips[j].Y) * inm, (float)(hands[i].fingertips[j].X) * inm, 0, 0)
+
+                                    };
+                                    canvas1.Children.Add(ellipse);
+                                }
+                                Ellipse ellipseCenter = new Ellipse
+                                {
+                                    Fill = brushGold,
+                                    Width = 15,
+                                    Height = 15,
+                                    Margin = new Thickness((float)(hands[i].palm.Y) * inm, (float)(hands[i].palm.X) * inm, 0, 0)
+
                                 };
-                                skeletonCanvas.Children.Add(ellipse);        
+                                canvas1.Children.Add(ellipseCenter);
+                                Int32Rect rect = new Int32Rect(0, 0, 2, 2);
+                                int size = rect.Width * rect.Height * 4;
+                                if ((bool)handContour.IsChecked)
+                                {
+                                    for (int j = 0; j < hands[i].contour.Count - 6; j = j + 6)
+                                    {
+
+                                        PointFT p = hands[i].contour[j];
+                                        Ellipse ellipse = new Ellipse
+                                        {
+                                            Fill = brushDarkRed,
+                                            Width = 3,
+                                            Height = 3,
+                                            Margin = new Thickness((float)(p.Y) * inm, (float)(p.X) * inm, 0, 0)
+
+                                        };
+                                        canvas1.Children.Add(ellipse);
+                                    }
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            fHandTracker.disable();
                         }
                     }
                 }
@@ -374,6 +451,7 @@ namespace DTWGestureRecognition
             ColorImagePoint colorImgpoint = Kinect.MapSkeletonPointToColor(joint.Position, ColorImageFormat.RgbResolution640x480Fps30);
             return new System.Windows.Point(colorImgpoint.X, colorImgpoint.Y);
         }
+       
         #endregion KinectEventsMethods
         #region DTWGestureRecognition
         private bool LoadGesturesFromFile(string fileLocation, DtwGestureRecognizer dtw,int dim)
@@ -446,7 +524,7 @@ namespace DTWGestureRecognition
             {
                 ////Debug.WriteLine("Reading and video.Count=" + video.Count);
                 string s = _dtw1.Recognize(_bodyVideo);
-                results.Text = "Body movements: " + s;
+                results.Text = "Body - Gesture: " + s;
                 if ((bool)enableNui.IsChecked)
                 {
                     GestureInterfaceControl.executeGesture(s);
@@ -461,7 +539,7 @@ namespace DTWGestureRecognition
             {
                 ////Debug.WriteLine("Reading and video.Count=" + video.Count);
                 string s = _dtw2.Recognize(_faceVideo);
-                faceResults.Text = "Face gesture: " + s;
+                faceResults.Text = "Face - Gesture: " + s;
                 if ((bool)enableNui.IsChecked)
                 {
                     GestureInterfaceControl.executeGesture(s);
@@ -472,6 +550,22 @@ namespace DTWGestureRecognition
                     _faceVideo = new ArrayList();
                 }
             }
+            if (_faceOrientationVideo.Count > MinimumFrames && _capturing == false)
+            {
+                ////Debug.WriteLine("Reading and video.Count=" + video.Count);
+                string s = _dtw3.Recognize(_faceOrientationVideo);
+                faceDynamicOrientation.Text = "Face - Dynamic Orientation: " + s;
+                if ((bool)enableNui.IsChecked)
+                {
+                    GestureInterfaceControl.executeGesture(s);
+                }
+                if (!s.Contains("__UNKNOWN"))
+                {
+                    // There was no match so reset the buffer
+                    _faceOrientationVideo = new ArrayList();
+                }
+            }
+
             // Ensures that we remember only the last x frames
             if (_bodyVideo.Count > BufferSize)
             {
@@ -514,6 +608,22 @@ namespace DTWGestureRecognition
                     _faceVideo.RemoveAt(0);
                 }
             }
+            if (_faceOrientationVideo.Count > BufferSize)
+            {
+                // If we are currently capturing and we reach the maximum buffer size then automatically store
+                if (_capturing)
+                {
+                    if ((bool)captureFaceO.IsChecked)
+                    {
+                        DtwStoreClick(null, null);
+                    }
+                }
+                else
+                {
+                    // Remove the first frame in the buffer
+                    _faceOrientationVideo.RemoveAt(0);
+                }
+            }
             
             // Decide which skeleton frames to capture. Only do so if the frames actually returned a number. 
             // For some reason my Kinect/PC setup didn't always return a double in range (i.e. infinity) even when standing completely within the frame.
@@ -530,11 +640,12 @@ namespace DTWGestureRecognition
                     {
                         if (FaceTrackingViewer.animationUnits != null)
                         {
-                             auxFaceAnimationUnit = FaceDataExtract.ProcessData(FaceTrackingViewer.animationUnits);
-                            _faceVideo.Add(auxFaceAnimationUnit);
+                            auxFaceAnimationUnit = FaceDataExtract.ProcessData(FaceTrackingViewer.animationUnits);
+                            _faceVideo.Add(FaceDataExtract.ProcessData(FaceTrackingViewer.animationUnits));
+                            _faceOrientationVideo.Add(FaceDataExtract.ProcessOrientationData()); //because when we have aninationUnits available we also have the orientation
                             for (int i = 0; i < auxFaceAnimationUnit.Length; i++)
                             {
-                                auxFaceAnimationUnit[i] =(int)(auxFaceAnimationUnit[i]*10000);
+                                auxFaceAnimationUnit[i] = (int)(auxFaceAnimationUnit[i] * 10000);
                             }
                             if (staticFaceInit)
                             {
@@ -544,31 +655,32 @@ namespace DTWGestureRecognition
                                 int indexF = -1;
                                 for (int i = 0; i < percentages.Length; i++)
                                 {
-                                   
+
                                     if (percentages[i] > minF)
                                     {
                                         minF = percentages[i];
                                         indexF = i;
                                     }
                                 }
-                                if (indexF != -1)
+
+                                if (indexF != -1 &&(minF>0.9))
                                 {
-                                    faceResultsS.Text = "Face static gesture: " + staticFaceGestures[indexF];
+                                    faceResultsS.Text = "Face - Static Gesture: " + staticFaceGestures[indexF];
                                 }
-                                else
+                                else if ((minF < 0.9))
                                 {
-                                    faceResultsS.Text = "Face static gesture: __UNKNOWN";
+                                    faceResultsS.Text = "Face - Static Gesture: __UNKNOWN";
                                 }
                             }
                         }
                     }
                     {
                         _bodyVideo.Add(a.GetCoords());
-                        auxBodyVideo =  a.GetCoords();
-                        for(int i=0;i<auxBodyVideo.Length;i++)
+                        auxBodyVideo = a.GetCoords();
+                        for (int i = 0; i < auxBodyVideo.Length; i++)
                         {
-                            auxBodyVideo[i] = (int)(auxBodyVideo[i]*10000);
-                        //    Debug.WriteLine(auxBodyVideo[i]);
+                            auxBodyVideo[i] = (int)(auxBodyVideo[i] * 10000);
+                            //    Debug.WriteLine(auxBodyVideo[i]);
                         }
                         if (staticBodyInit)
                         {
@@ -578,25 +690,27 @@ namespace DTWGestureRecognition
                             int index = -1;
                             for (int i = 0; i < percentages.Length; i++)
                             {
-                              //  Debug.WriteLine(percentages[i]);
+                                //  Debug.WriteLine(percentages[i]);
                                 if (percentages[i] > min)
                                 {
                                     min = percentages[i];
                                     index = i;
-                                }                       
+                                }
                             }
-                            if (index != -1)
+                            if (index != -1 && (min > 0.9))
                             {
-                                resultsS.Text = "Body static gesture: " + staticBodyGestures[index];
+                                resultsS.Text = "Body - Static Gesture: " + staticBodyGestures[index];
                             }
-                            else
+                            else if ((min < 0.9))
                             {
-                                resultsS.Text = "Body static gesture: __UNKNOWN";
+                                resultsS.Text = "Body - Static Gesture: __UNKNOWN";
                             }
                         }
                     }
-  
-                    
+                    {
+
+                    }
+
                 }
             }
             // Update the debug window with Sequences information
@@ -636,6 +750,30 @@ namespace DTWGestureRecognition
                     {
                         status.Text = "Status: Recording face movement";
                     }
+                    else if ((bool)captureFaceO.IsChecked)
+                    {
+                        status.Text = "Status: Recording face orientation gesture";
+                    }
+                    else if ((bool)captureBody.IsChecked)
+                    {
+                        status.Text = "Status: Recording body gesture";
+                    }
+                    else if ((bool)captureHand.IsChecked)
+                    {
+                        status.Text = "Status: Recording hand gesture";
+                    }
+                    else if ((bool)captureHandS.IsChecked)
+                    {
+                        status.Text = "Status: Recording hand static gesture";
+                    }
+                    else if ((bool)captureBodyS.IsChecked)
+                    {
+                        status.Text = "Status: Recording body static gesture";
+                    }
+                    else if ((bool)captureFaceS.IsChecked)
+                    {
+                        status.Text = "Status: Recording face static gesture";
+                    }
                     else
                     {
                         status.Text = "Status: Recording gesture";
@@ -654,17 +792,11 @@ namespace DTWGestureRecognition
             _capturing = true;
 
             ////_captureCountdownTimer.Dispose();
-            if ((bool)captureFace.IsChecked)
-            {
-                status.Text = "Status: Recording face movement";
-            }
-            else
-            {
-                status.Text = "Status: Recording gesture";
-            }
+
             // Clear the _video buffer and start from the beginning
             _bodyVideo = new ArrayList();
-              _faceVideo = new ArrayList();
+            _faceVideo = new ArrayList();
+            _faceOrientationVideo = new ArrayList();
         }
         private void DtwStoreClick(object sender, RoutedEventArgs e)
         {
@@ -686,11 +818,19 @@ namespace DTWGestureRecognition
                 dtw.AddOrUpdate(_video, gestureList.Text, eachLabelRecordingNb);
                 results.Text = "Gesture " + gestureList.Text + " added";
             }
+            else if ((bool)captureFaceO.IsChecked)
+            {
+                dtw = _dtw3;
+                _video = _faceOrientationVideo;
+                // Add the current video buffer to the dtw sequences list
+                dtw.AddOrUpdate(_video, gestureList.Text, eachLabelRecordingNb);
+                faceDynamicOrientation.Text = "Gesture " + gestureList.Text + " added";
+            }
             else if ((bool)captureFaceS.IsChecked)
             {
                 staticFaceExtractor.AddOrUpdate(_faceVideo, gestureList.Text, eachLabelRecordingNb);
-                 _faceVideo = new ArrayList();
-                 _video = _faceVideo;
+                _faceVideo = new ArrayList();
+                _video = _faceVideo;
             }
             else if ((bool)captureBodyS.IsChecked)
             {
@@ -718,6 +858,12 @@ namespace DTWGestureRecognition
                 status.Text = "Status: Saved to " + fileName;
                 System.IO.File.WriteAllText(GestureSaveFileLocation + fileName, _dtw2.RetrieveText());
             }
+            else if ((bool)captureFaceO.IsChecked)
+            {
+                string fileName = GestureFaceOrientationSaveFileNamePrefix + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".txt";
+                status.Text = "Status: Saved to " + fileName;
+                System.IO.File.WriteAllText(GestureSaveFileLocation + fileName, _dtw3.RetrieveText());
+            }
             else if ((bool)captureBody.IsChecked)
             {
                 string fileName = GestureBodySaveFileNamePrefix + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".txt";
@@ -739,9 +885,7 @@ namespace DTWGestureRecognition
             else
             {
                 status.Text = "Status: Please select what type of dynamic gestures to save";
-            }
-           
-            
+            } 
         }
 
         private void DtwLoadFile(object sender, RoutedEventArgs e)
@@ -749,8 +893,8 @@ namespace DTWGestureRecognition
             // Create OpenFileDialog
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             // Set filter for file extension and default file extension
-            _Kinect.ElevationAngle = 10;
-            if ((bool)captureFaceS.IsChecked || (bool)captureBodyS.IsChecked)
+            //_Kinect.ElevationAngle = 10;
+            if ((bool)captureFaceS.IsChecked || (bool)captureBodyS.IsChecked || (bool)captureHandS.IsChecked)
             {
                 dlg.DefaultExt = ".model";
                 dlg.Filter = "Text documents (.model)|*.model";
@@ -772,11 +916,11 @@ namespace DTWGestureRecognition
                    bool loaderResult = LoadGesturesFromFile(dlg.FileName, _dtw1, 18);
                    if (loaderResult)
                    {
-                       status.Text = "Status: Body Gesture loaded";
+                       status.Text = "Status: Body - Gesture loaded";
                    }
                    else
                    {
-                       status.Text = "Status: Invalid Body Gesture File";
+                       status.Text = "Status: Invalid Body - Gesture File";
                    }
                 }
                 else if ((bool)captureFace.IsChecked)
@@ -784,11 +928,23 @@ namespace DTWGestureRecognition
                     bool loaderResult = LoadGesturesFromFile(dlg.FileName, _dtw2, 6);
                     if (loaderResult)
                     {
-                        status.Text = "Status: Face Gesture loaded";
+                        status.Text = "Status: Face - Gesture loaded";
                     }
                     else
                     {
-                        status.Text = "Status: Invalid Face Gesture File";
+                        status.Text = "Status: Invalid Face - Gesture File";
+                    }
+                }
+                else if ((bool)captureFaceO.IsChecked)
+                {
+                    bool loaderResult = LoadGesturesFromFile(dlg.FileName, _dtw3, 3);
+                    if (loaderResult)
+                    {
+                        status.Text = "Status: Face - Dynamic Orientation Gestures loaded";
+                    }
+                    else
+                    {
+                        status.Text = "Status: Invalid Face - Dynamic Orientation Gestures File";
                     }
                 }
                 else if ((bool)captureFaceS.IsChecked)
@@ -815,7 +971,7 @@ namespace DTWGestureRecognition
                 }
                 else
                 {
-                    status.Text = "Status: Please select what type of dynamic gestures to load";
+                    status.Text = "Status: Please select what type of gestures to load";
                 }
                 //dtwTextOutput.Text = _dtw.RetrieveText();
                
@@ -904,6 +1060,11 @@ namespace DTWGestureRecognition
                 }
             };
             barInvoker.RunWorkerAsync();
+        }
+
+        private void checkBox1_Checked_2(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

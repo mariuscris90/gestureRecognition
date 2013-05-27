@@ -65,3 +65,5 @@ C:\Users\Cristian\Desktop\Licenta\kinect licenta e1\08042013\RecunoastereGesturi
 C:\Users\Cristian\Desktop\Licenta\kinect licenta e1\08042013\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.pdb
 C:\Users\Cristian\Desktop\Licenta\kinect licenta e1\21042013\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.exe
 C:\Users\Cristian\Desktop\Licenta\kinect licenta e1\21042013\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.pdb
+C:\Users\Cristian\Desktop\Licenta\kinect licenta e1\20052013\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.exe
+C:\Users\Cristian\Desktop\Licenta\kinect licenta e1\20052013\RecunoastereGesturi\DTWGestureRecognition\obj\x86\Debug\DTWGestureRecognition.pdb

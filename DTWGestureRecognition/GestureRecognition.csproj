@@ -67,6 +67,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -96,6 +97,11 @@
       <DependentUpon>FaceTrackingViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="GestureInterfaceControl.cs" />
+    <Compile Include="HandDetection\FHandTracker.cs" />
+    <Compile Include="HandDetection\FHandTrackerSettings.cs" />
+    <Compile Include="HandDetection\Hand.cs" />
+    <Compile Include="HandDetection\PointFT.cs" />
+    <Compile Include="HandDetection\Vector3FT.cs" />
     <Compile Include="MouseControl.cs" />
     <Compile Include="MouseNativeMethods.cs" />
     <Compile Include="Skeleton2DdataCoordEventArgs.cs" />
@@ -155,6 +161,7 @@
   <ItemGroup>
     <Resource Include="SpeechGrammar.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
